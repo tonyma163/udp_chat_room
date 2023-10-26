@@ -34,7 +34,6 @@ func setClientRoom(addr *net.UDPAddr, room string) {
 }
 
 func broadcastMessage(conn *net.UDPConn, sender *net.UDPAddr, message string) {
-	// TODO: Implement broadcast logic to send the message to all connected clients
 	clientMutex.Lock()
 	defer clientMutex.Unlock()
 
@@ -45,7 +44,6 @@ func broadcastMessage(conn *net.UDPConn, sender *net.UDPAddr, message string) {
 		return
 	}
 
-	//fmt.Println("Clients: ", clients)
 	fullMessage := senderClient.Room + " " + message
 
 	for _, client := range clients {
@@ -56,7 +54,6 @@ func broadcastMessage(conn *net.UDPConn, sender *net.UDPAddr, message string) {
 			}
 		}
 	}
-	//fmt.Println("BRD!")
 }
 
 func main() {

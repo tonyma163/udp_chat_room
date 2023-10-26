@@ -31,8 +31,6 @@ func receiveMessage(conn *net.UDPConn, room string) {
 			return
 		}
 
-		//fmt.Println("CLIENT RECEIVED: ", string(buffer[:n]))
-
 		fullMessage := string(buffer[:n])
 		parts := strings.SplitN(fullMessage, " ", 2)
 		if len(parts) < 2 {
