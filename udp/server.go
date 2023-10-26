@@ -45,25 +45,31 @@ func broadcastMessage(conn *net.UDPConn, sender *net.UDPAddr, message string) {
 		return
 	}
 
+	//fmt.Println("Clients: ", clients)
+	fullMessage := senderClient.Room + " " + message
+
 	for _, client := range clients {
 		if client.Room == senderClient.Room {
-			_, err := conn.WriteToUDP([]byte(message), client.Address)
+			_, err := conn.WriteToUDP([]byte(fullMessage), client.Address)
 			if err != nil {
 				fmt.Println("Error sending message to ", client.Address, ": ", err)
 			}
 		}
 	}
+	//fmt.Println("BRD!")
 }
 
 func main() {
 	udpAddr, err := net.ResolveUDPAddr("udp", serverAddress)
 	if err != nil {
 		fmt.Println("Error resolving address: ", err)
+		return
 	}
 
 	conn, err := net.ListenUDP("udp", udpAddr)
 	if err != nil {
 		fmt.Println("Error while listening: ", err)
+		return
 	}
 	defer conn.Close()
 
