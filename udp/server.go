@@ -44,13 +44,37 @@ func broadcastMessage(conn *net.UDPConn, sender *net.UDPAddr, message string) {
 		return
 	}
 
-	fullMessage := senderClient.Room + " " + message
+	if message != "join" && message != "exit" {
+		fullMessage := senderClient.Room + " " + senderClient.Address.String() + ": " + message
 
-	for _, client := range clients {
-		if client.Room == senderClient.Room {
-			_, err := conn.WriteToUDP([]byte(fullMessage), client.Address)
-			if err != nil {
-				fmt.Println("Error sending message to ", client.Address, ": ", err)
+		for _, client := range clients {
+			if client.Room == senderClient.Room && client.Address != senderClient.Address {
+				_, err := conn.WriteToUDP([]byte(fullMessage), client.Address)
+				if err != nil {
+					fmt.Println("Error sending message to ", client.Address, ": ", err)
+				}
+			}
+		}
+	} else if message == "exit" {
+		fullMessage := senderClient.Room + " " + senderClient.Address.String() + " has left."
+
+		for _, client := range clients {
+			if client.Room == senderClient.Room && client.Address != senderClient.Address {
+				_, err := conn.WriteToUDP([]byte(fullMessage), client.Address)
+				if err != nil {
+					fmt.Println("Error sending message to ", client.Address, ": ", err)
+				}
+			}
+		}
+	} else {
+		fullMessage := senderClient.Room + " " + senderClient.Address.String() + " has joined!"
+
+		for _, client := range clients {
+			if client.Room == senderClient.Room && client.Address != senderClient.Address {
+				_, err := conn.WriteToUDP([]byte(fullMessage), client.Address)
+				if err != nil {
+					fmt.Println("Error sending message to ", client.Address, ": ", err)
+				}
 			}
 		}
 	}

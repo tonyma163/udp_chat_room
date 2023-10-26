@@ -41,7 +41,9 @@ func receiveMessage(conn *net.UDPConn, room string) {
 		messageContent := parts[1]
 
 		if messageRoom == room {
-			fmt.Printf("Received message: %s\n", messageContent)
+			// Received message
+			fmt.Printf("\n%s\n", messageContent)
+			fmt.Print(">")
 		}
 	}
 }
@@ -67,9 +69,10 @@ func main() {
 
 	fmt.Println("Welcome to UDP Chat!")
 
+	go receiveMessage(conn, room)
+
 	for {
-		go receiveMessage(conn, room)
-		fmt.Print("Type message to send, or type 'exit' to quit: ")
+		fmt.Print("\nType message to send, or type 'exit' to quit> ")
 		reader := bufio.NewReader(os.Stdin)
 		message, _ := reader.ReadString('\n')
 		message = strings.TrimRight(message, "\n")
